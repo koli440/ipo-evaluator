@@ -1,0 +1,27 @@
+name: IPO Radar Daily
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Spustí se každý den v 8:00 UTC
+  workflow_dispatch:      # Umožní i ruční spuštění jedním klikem
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install feedparser requests
+
+      - name: Run script
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+        run: python ipo_radar.py
