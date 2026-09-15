@@ -1,12 +1,14 @@
-name: IPO Radar Daily
+name: Daily IPO Radar
 
 on:
   schedule:
-    - cron: '0 8 * * *'  # Spustí se každý den v 8:00 UTC
-  workflow_dispatch:      # Umožní i ruční spuštění jedním klikem
+    # Run every day at 07:00 UTC (e.g. 08:00 CET / 09:00 CEST)
+    - cron: '0 7 * * *'
+  # Allows you to trigger the job manually from the GitHub web UI
+  workflow_dispatch:
 
 jobs:
-  run-script:
+  run-radar:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -15,13 +17,16 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install feedparser requests
+        run: |
+          pip install -r requirements.txt
 
-      - name: Run script
+      - name: Run IPO Script
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
-        run: python ipo_radar.py
+          EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: |
+          python ipo_radar.py
