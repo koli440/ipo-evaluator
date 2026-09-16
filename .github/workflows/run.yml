@@ -2,8 +2,8 @@ name: Daily IPO Radar
 
 on:
   schedule:
-    # Run every day at 07:00 UTC (e.g. 08:00 CET / 09:00 CEST)
-    - cron: '0 7 * * *'
+    # Run every day at 09:00 UTC (e.g. 10:00 CET / 11:00 CEST)
+    - cron: '0 9 * * *'
   # Allows you to trigger the job manually from the GitHub web UI
   workflow_dispatch:
 
